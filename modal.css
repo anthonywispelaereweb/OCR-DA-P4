@@ -49,19 +49,16 @@ img {
   font-size: 20px;
   font-family: Roboto, sans-serif;
 }
-
 .topnav a:hover {
   background-color: #ff0000;
   color: #ffffff;
   border-radius: 15px;
 }
-
 .topnav a.active {
   background-color: #ff0000;
   color: #ffffff;
   border-radius: 15px;
 }
-
 .topnav .icon {
   display: none;
 }
@@ -86,30 +83,29 @@ img {
   }
   .topnav.responsive {
     position: relative;
-    
   }
   .topnav.responsive .icon {
     position: absolute;
     right: 0;
-    top: 20px;
+    top: 0;
   }
   .topnav.responsive a {
     float: none;
     display: block;
     text-align: left;
-
+  }
+  .topnav a {
+    margin: 0;
   }
   .topnav.responsive .main-navbar {
     position: absolute;
-    top: 0;
+    top: 16px;
     right: 0;
     background: #fafafa;
     z-index: 2;
     border-radius: 15px;
   }
 }
-
-
 
  @media screen and (max-width: 540px) {
   .topnav a {display: none;}
@@ -130,8 +126,6 @@ main {
   margin: 1px 20px 15px;
   border-radius: 2rem;
   text-align: justify;
-
-
 }
 
 .modal-btn {
@@ -144,11 +138,9 @@ main {
   border-radius: 1rem;
   cursor: pointer;
 }
-
 .modal-btn:hover {
   background: #3876ac;
 }
-
 .footer {
   margin: 20px;
   padding: 10px;
@@ -156,7 +148,6 @@ main {
 }
 
 /* Modal form */
-
 .button {
   background: #fe142f;
   margin-top: 0.5em;
@@ -166,15 +157,12 @@ main {
   cursor: pointer;
   font-size: 16px;
 }
-
 .button:hover {
   background: #3876ac;
 }
-
 .smFont {
   font-size: 16px;
 }
-
 .bground {
   display: none;
   position: fixed;
@@ -186,7 +174,6 @@ main {
   overflow: auto;
   background-color: rgba(26, 39, 156, 0.4);
 }
-
 .content {
   margin: 5% auto;
   z-index: 2;
@@ -201,12 +188,10 @@ main {
   color: #fff;
   padding-top: 10px;
 }
-
 .modal-body {
   padding: 15px 8%;
   margin: 15px auto;
 }
-
 label {
   font-family: var(--font-default);
   font-size: 17px;
@@ -246,6 +231,7 @@ input {
   border: 2px solid #e54858;
 }
 
+/* Input style */
 input[data-error]::after {
     content: attr(data-error);
     font-size: 0.4em;
@@ -352,62 +338,6 @@ input[data-error]::after {
   cursor: pointer;
   border: 0;
 }
-/* custom select styles */
-.custom-select {
-  position: relative;
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 1.1rem;
-  font-weight: normal;
-}
-
-.custom-select select {
-  display: none;
-}
-.select-selected {
-  background-color: #fff;
-}
-
-/* Style the arrow inside the select element: */
-.select-selected:after {
-  position: absolute;
-  content: "";
-  top: 10px;
-  right: 13px;
-  width: 11px;
-  height: 11px;
-  border: 3px solid transparent;
-  border-bottom-color: #f00;
-  border-left-color: #f00;
-  transform: rotate(-48deg);
-  border-radius: 5px 0 5px 0;
-}
-
-/* Point the arrow upwards when the select box is open (active): */
-.select-selected.select-arrow-active:after {
-  transform: rotate(135deg);
-  top: 13px;
-}
-
-.select-items div,
-.select-selected {
-  color: #000;
-  padding: 11px 16px;
-  border: 1px solid transparent;
-  border-color: transparent transparent rgba(0, 0, 0, 0.1) transparent;
-  cursor: pointer;
-  border-radius: 8px;
-  height: 48px;
-}
-
-/* Style items (options): */
-.select-items {
-  position: absolute;
-  background-color: #fff;
-  top: 89%;
-  left: 0;
-  right: 0;
-  z-index: 99;
-}
 
 /* Hide the items when the select box is closed: */
 .hide {
@@ -423,12 +353,9 @@ input[data-error]::after {
   justify-content: center;
   align-items: center;
   text-align: center;
-  min-height: 50vh;
+  min-height: 80vh;
 }
-.select-items div:hover,
-.same-as-selected {
-  background-color: rgba(0, 0, 0, 0.1);
-}
+
 /* custom select end */
 .text-label {
   font-weight: normal;
@@ -470,7 +397,7 @@ input[data-error]::after {
   font-weight: normal;
   white-space: nowrap;
 }
-.hero-text {
+.hero-headline {
   width: 146%;
   font-weight: normal;
   margin-top: 57px;
@@ -506,7 +433,7 @@ input[data-error]::after {
 footer {
   padding-left: 2vw;
   padding-right: 2vw;
-  margin: 0 20px;
+  margin: 0;
 }
 @media screen and (max-width: 800px) {
   .content {
