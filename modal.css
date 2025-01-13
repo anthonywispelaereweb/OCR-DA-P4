@@ -75,16 +75,37 @@ img {
 }
 
 @media screen and (max-width: 768px) {
-  .topnav.responsive {position: relative;}
+  .topnav {
+    display: flex;
+    justify-content: space-between;
+    overflow: visible;
+    padding: 1rem;
+  }
+  .header-logo img {
+    max-width: 70%;
+  }
+  .topnav.responsive {
+    position: relative;
+    
+  }
   .topnav.responsive .icon {
     position: absolute;
     right: 0;
-    top: 0;
+    top: 20px;
   }
   .topnav.responsive a {
     float: none;
     display: block;
     text-align: left;
+
+  }
+  .topnav.responsive .main-navbar {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: #fafafa;
+    z-index: 2;
+    border-radius: 15px;
   }
 }
 
@@ -169,7 +190,6 @@ main {
 .content {
   margin: 5% auto;
   z-index: 2;
-
   width: 100%;
   max-width: 500px;
   animation-name: modalopen;
@@ -489,6 +509,9 @@ footer {
   margin: 0 20px;
 }
 @media screen and (max-width: 800px) {
+  .content {
+    overflow: auto;
+  }
   .hero-section {
     display: block;
     box-shadow: unset;
@@ -496,7 +519,7 @@ footer {
   .hero-content {
     background: #fff;
     color: #000;
-    padding: 20px;
+    padding: 5px;
   }
   .hero-content::after {
     content: unset;

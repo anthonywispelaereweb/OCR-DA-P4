@@ -10,7 +10,8 @@ const modalbg = document.querySelector('.bground'),
   formData = document.querySelectorAll('.formData'),
   modalBody = document.querySelectorAll('.modal-body'),
   closeBtn = document.querySelectorAll('.close'),
-  navBarBtn = document.querySelector('.navbar-js');
+  navBarBtn = document.querySelector('.navbar-js'),
+  firstInput = document.querySelector('#first');
 
 // launch modal form
 const launchModal = () => {
@@ -24,7 +25,7 @@ const launchModal = () => {
   allHideElements.forEach(el => {
     el.classList.remove('hide')
   })
-
+  firstInput.focus()
 }
 // close modal form
 const closeModal = () => {
@@ -109,7 +110,27 @@ const checkFormValid = () => {
   })
   return isValid
 }
+const postInfo = async() => {
+  const formData = new FormData(formHTML)
+  const data = {}
+  formData.forEach((value, key) => {
+    data[key] = value
+  }) 
+  const options = {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  }
+  console.log("🚀 ~ postInfo ~ options.data:", options.body)
+  const response = await fetch('https://restapi.fr/api/OCR-tes-tonio', options)
+  if (response.ok) {
+    console.log('🚀 ~ postInfo ~ response:', response)
+    displaySuccessMessage()
 
+  }
+}
 const displaySuccessMessage = () => {
   const hideElements = ['.formData', '.text-label', '.btn-submit']
   hideElements.forEach(el => {
@@ -141,6 +162,6 @@ formHTML.addEventListener('submit', e => {
   e.preventDefault()
   const isValid = checkFormValid()
   if (isValid) {
-    displaySuccessMessage()
+    postInfo()
   }
 })
