@@ -11,16 +11,14 @@ const initMaxValueBirthDate = () => {
   const maxDate = `${year}-${month}-${day}` 
   const birthdate = document.querySelector('#birthdate')
   birthdate.setAttribute('max', maxDate)
-  console.log("🚀 ~ initMaxValueBirthDate ~ maxDate:", maxDate)
   return maxDate
 }
-// initMaxValueBirthDate()
 // DOM Elements
 const modalbg = document.querySelector('.bground'),
   formHTML = document.querySelector('.modal-body form'),
   modalBtn = document.querySelectorAll('.modal-btn'),
-  formData = document.querySelectorAll('.formData'),
-  modalBody = document.querySelectorAll('.modal-body'),
+  formDataHTML = document.querySelectorAll('.formData'),
+  modalBody = document.querySelector('.modal-body'),
   closeBtn = document.querySelectorAll('.close'),
   navBarBtn = document.querySelector('.navbar-js'),
   firstInput = document.querySelector('#first');
@@ -29,7 +27,6 @@ const globalData = {
   maxBirthdate: initMaxValueBirthDate(),
 }
 
-// globalData.maxBirthdate = new Date().toISOString().split('T')[0]
 // launch modal form
 const launchModal = () => {
   modalbg.classList.add('show')
@@ -38,7 +35,6 @@ const launchModal = () => {
   const succcesMessage = document.querySelector('.success-message')
   if (succcesMessage) succcesMessage.remove()
   if (btnCloseJs) btnCloseJs.remove()
-  console.log("🚀 ~ launchModal ~ succcesMessage:", succcesMessage)
   allHideElements.forEach(el => {
     el.classList.remove('hide')
   })
@@ -48,6 +44,10 @@ const launchModal = () => {
 const closeModal = () => {
   modalbg.classList.remove('show')
   modalbg.classList.add('hide')
+  // Clear success-message if exist
+  const successMessageHTML = document.querySelector('.success-message')
+  if (successMessageHTML) successMessageHTML.remove()
+  // Reset Form
   formHTML.reset()
 }
 // navar event responsive
@@ -58,11 +58,9 @@ navBarBtn.addEventListener('click', () => {
 modalBtn.forEach(btn => btn.addEventListener('click', () => launchModal()))
 closeBtn.forEach(btn => btn.addEventListener('click', () => closeModal()))
 modalbg.addEventListener('click', () => closeModal())
-modalBody.forEach(btn =>
-  btn.addEventListener('click', ev => {
-    ev.stopPropagation()
-  })
-)
+modalBody.addEventListener('click', ev => {
+  ev.stopPropagation()
+})
 
 const displayErrorMessage = (el, input, isError) => {
   let idCase = input.getAttribute('id') || input.getAttribute('name')
@@ -86,7 +84,7 @@ const displayErrorMessage = (el, input, isError) => {
       case 'location1':
         el.dataset.error = 'Vous devez choisir une ville.'
         break
-      case 'checkbox1':
+      case 'accepCGV':
         el.dataset.error = 'Vous devez vérifier que vous acceptez les termes et conditions.'
         break
     }
@@ -95,7 +93,7 @@ const displayErrorMessage = (el, input, isError) => {
   }
 }
 const validateEmail = (email) => {
-  // https://regexr.com/8autj
+  // Regex details https://regexr.com/8autj
   return String(email)
     .toLowerCase()
     .match(
@@ -104,7 +102,7 @@ const validateEmail = (email) => {
 };
 const checkFormValid = () => {
   let isValid = true
-  formData.forEach(data => {
+  formDataHTML.forEach(data => {
     const input = data.querySelector('input')
     // manage empty input
     if (input.value.trim() === '') {
@@ -126,7 +124,7 @@ const checkFormValid = () => {
     }
     // manage email input
     if (input.type === 'email' && input.name === 'email') {
-      if (!validateEmail(input.value)) {
+      if (!validateEmail(input.value.trim())) {
         isValid = false
         data.dataset.errorVisible = true
       } else {
@@ -155,7 +153,7 @@ const checkFormValid = () => {
         data.dataset.errorVisible = false
       }
     }
-    // display error message or not
+    // display error message or remove it
     displayErrorMessage(data, input, data.dataset.errorVisible)
   })
   return isValid
@@ -173,15 +171,19 @@ const postInfo = async() => {
     },
     body: JSON.stringify(data),
   }
-
-  const response = await fetch(`https://restapi.fr/api/OCR-test-tonio-${globalData.maxBirthdate}`, options)
+  const urlApi = `https://restapi.fr/api/OCR-test-tonio-${globalData.maxBirthdate}`
+  const response = await fetch(urlApi, options)
   if (response.ok) {
-    console.log('🚀 ~ postInfo ~ response:', response)
-    displaySuccessMessage()
+    console.log()
+    let result = await response.json()
+    let customMessage = `Requête reçu sur ${urlApi}`
+    console.log('🚀 ~ postInfo ~ result:', result)
+    console.log('🚀 ~ postInfo ~ customMessage:', customMessage)
+    displaySuccessMessage(customMessage)
   }
 }
 
-const displaySuccessMessage = () => {
+const displaySuccessMessage = (message) => {
   const hideElements = ['.formData', '.text-label', '.btn-submit']
   hideElements.forEach(el => {
     const els = document.querySelectorAll(el)
@@ -190,7 +192,7 @@ const displaySuccessMessage = () => {
     })
   })
   const successMessage = document.createElement('div')
-  successMessage.textContent = `Merci ! Votre réservation a été reçue.`
+  successMessage.textContent = message || `Merci ! Votre réservation a été reçue.`
   successMessage.classList.add('success-message')
 
   const inputClose = document.createElement('input')
@@ -201,7 +203,7 @@ const displaySuccessMessage = () => {
     closeModal()
   })
 
-  formData.forEach(data => {
+  formDataHTML.forEach(data => {
     data.classList.add('hide')
   })
   formHTML.appendChild(successMessage)
