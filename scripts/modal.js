@@ -79,7 +79,7 @@ const displayErrorMessage = (el, input, isError) => {
         el.dataset.error = 'Vous devez entrer votre date de naissance.'
         break
       case 'quantity':
-        el.dataset.error = 'Veuillez entrer un nombre.'
+        el.dataset.error = 'Veuillez entrer un nombre positif ou 0.'
         break
       case 'location1':
         el.dataset.error = 'Vous devez choisir une ville.'
@@ -147,6 +147,15 @@ const checkFormValid = () => {
     // manage checkbox input
     if (input.type === 'checkbox') {
       if (!input.checked) {
+        isValid = false
+        data.dataset.errorVisible = true
+      } else {
+        data.dataset.errorVisible = false
+      }
+    }
+    // manage unmber input
+    if (input.type === 'number') {
+      if (!input.value || input.value < 0) {
         isValid = false
         data.dataset.errorVisible = true
       } else {
