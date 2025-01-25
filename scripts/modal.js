@@ -1,7 +1,25 @@
-const editNav = () => {
-  let x = document.getElementById('myTopnav')
-  x.classList.toggle('responsive')
-}
+// DOM Elements
+const modalbg = document.querySelector('.bground'),
+  formHTML = document.querySelector('.modal-body form'),
+  modalBtn = document.querySelectorAll('.modal-btn'),
+  formDataHTML = document.querySelectorAll('.formData'),
+  modalBody = document.querySelector('.modal-body'),
+  closeBtn = document.querySelectorAll('.close'),
+  navBarBtn = document.querySelector('.navbar-js'),
+  firstInput = document.querySelector('#first'),
+  lastInput = document.querySelector('#last'),
+  emailInput = document.querySelector('#email'),
+  birthdateInput = document.querySelector('#birthdate'),
+  quantityInput = document.querySelector('#quantity'),
+  location1Input = document.querySelector('#location1'),
+  location2Input = document.querySelector('#location2'),
+  location3Input = document.querySelector('#location3'),
+  location4Input = document.querySelector('#location4'),
+  location5Input = document.querySelector('#location5'),
+  location6Input = document.querySelector('#location6'),
+  accepCGVInput = document.querySelector('#accepCGV');
+
+
 // Add the max value for the birthdate input
 const initMaxValueBirthDate = () => {
   const date = new Date()
@@ -13,20 +31,15 @@ const initMaxValueBirthDate = () => {
   birthdate.setAttribute('max', maxDate)
   return maxDate
 }
-// DOM Elements
-const modalbg = document.querySelector('.bground'),
-  formHTML = document.querySelector('.modal-body form'),
-  modalBtn = document.querySelectorAll('.modal-btn'),
-  formDataHTML = document.querySelectorAll('.formData'),
-  modalBody = document.querySelector('.modal-body'),
-  closeBtn = document.querySelectorAll('.close'),
-  navBarBtn = document.querySelector('.navbar-js'),
-  firstInput = document.querySelector('#first');
 
 const globalData = {
   maxBirthdate: initMaxValueBirthDate(),
 }
 
+const editNav = () => {
+  let x = document.getElementById('myTopnav')
+  x.classList.toggle('responsive')
+}
 // launch modal form
 const launchModal = () => {
   modalbg.classList.add('show')
@@ -40,6 +53,7 @@ const launchModal = () => {
   })
   firstInput.focus()
 }
+
 // close modal form
 const closeModal = () => {
   modalbg.classList.remove('show')
@@ -50,10 +64,12 @@ const closeModal = () => {
   // Reset Form
   formHTML.reset()
 }
+
 // navar event responsive
 navBarBtn.addEventListener('click', () => {
   editNav()
 })
+
 // modal and form events
 modalBtn.forEach(btn => btn.addEventListener('click', () => launchModal()))
 closeBtn.forEach(btn => btn.addEventListener('click', () => closeModal()))
@@ -62,6 +78,7 @@ modalBody.addEventListener('click', ev => {
   ev.stopPropagation()
 })
 
+// Method to set or remove a error message
 const displayErrorMessage = (el, input, isError) => {
   let idCase = input.getAttribute('id') || input.getAttribute('name')
   if (isError) {
@@ -92,6 +109,57 @@ const displayErrorMessage = (el, input, isError) => {
     el.dataset.error = ''
   }
 }
+
+const validateInput = (input, data) => {
+  // manage empty input
+  if (input.value.trim() === '') {
+    data.dataset.errorVisible = true
+    return false
+  } else {
+    data.dataset.errorVisible = false
+  }
+  // manage text input
+  if (input.type === 'text' && (input.name === 'first' || input.name === 'last')) {
+    return validateTextInput(input, data)
+  }
+  // manage date input
+  if (input.type === 'date' && input.name === 'birthdate') {
+    return validateDateInput(input, data)
+  }
+  // manage email input
+  if (input.type === 'email' && input.name === 'email') {
+    return validateEmailInput(input, data)
+  }
+  // manage radio input
+  if (input.type === 'radio' && input.name === 'location') {
+    return validateRadioInput(input, data)
+  }
+  // manage checkbox input
+  if (input.type === 'checkbox') {
+    return validateCheckboxInput(input, data)
+  }
+  // manage number input
+  if (input.type === 'number') {
+    return validateNumberInput(input, data)
+  }
+
+  return true
+}
+
+// Method to check all values in form
+const checkFormValid = () => {
+  let isValid = true
+  formDataHTML.forEach(data => {
+    const input = data.querySelector('input')
+    if (!validateInput(input, data)) {
+      isValid = false
+    }
+    displayErrorMessage(data, input, data.dataset.errorVisible)
+  })
+  return isValid
+}
+
+// Method to check email input
 const validateEmail = (email) => {
   // Regex details https://regexr.com/8autj
   return String(email)
@@ -100,73 +168,141 @@ const validateEmail = (email) => {
       /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
     );
 };
-const checkFormValid = () => {
-  let isValid = true
-  formDataHTML.forEach(data => {
-    const input = data.querySelector('input')
-    // manage empty input
-    if (input.value.trim() === '') {
-      data.dataset.errorVisible = true
-      isValid = false
-    } else {
-      data.dataset.errorVisible = false
-    }
-    // manage date input
-    if (input.type === 'date' && input.name === 'birthdate') {
-      const date = new Date(input.value)
-      const dateNow = new Date()
-      if (date > dateNow) {
-        isValid = false
-        data.dataset.errorVisible = true
-      } else {
-        data.dataset.errorVisible = false
-      }
-    }
-    // manage email input
-    if (input.type === 'email' && input.name === 'email') {
-      if (!validateEmail(input.value.trim())) {
-        isValid = false
-        data.dataset.errorVisible = true
-      } else {
-        data.dataset.errorVisible = false
-      }
-    }
 
-    // manage radio input
-    if (input.type === 'radio' && input.name === 'location') {
-      const radioName = input.getAttribute('name')
-      const radioChecked = document.querySelector(`input[name="${radioName}"]:checked`)
-      if (!radioChecked) {
-        isValid = false
-        data.dataset.errorVisible = true
-      } else {
-        data.dataset.errorVisible = false
-      }
-    }
-
-    // manage checkbox input
-    if (input.type === 'checkbox') {
-      if (!input.checked) {
-        isValid = false
-        data.dataset.errorVisible = true
-      } else {
-        data.dataset.errorVisible = false
-      }
-    }
-    // manage unmber input
-    if (input.type === 'number') {
-      if (!input.value || input.value < 0) {
-        isValid = false
-        data.dataset.errorVisible = true
-      } else {
-        data.dataset.errorVisible = false
-      }
-    }
-    // display error message or remove it
-    displayErrorMessage(data, input, data.dataset.errorVisible)
-  })
-  return isValid
+// Method to check text input
+const validateTextInput = (input, data) => {
+  if (input.value.length < 2) {
+    data.dataset.errorVisible = true
+    return false
+  } else {
+    data.dataset.errorVisible = false
+    return true
+  }
 }
+
+// Method to check date input
+const validateDateInput = (input, data) => {
+  const date = new Date(input.value)
+  const dateNow = new Date()
+  if (date > dateNow) {
+    data.dataset.errorVisible = true
+    return false
+  } else {
+    data.dataset.errorVisible = false
+    return true
+  }
+}
+
+// Method to check email input
+const validateEmailInput = (input, data) => {
+  if (!validateEmail(input.value.trim())) {
+    data.dataset.errorVisible = true
+    return false
+  } else {
+    data.dataset.errorVisible = false
+    return true
+  }
+}
+
+// Method to check radio input
+const validateRadioInput = (input, data) => {
+  const radioName = input.getAttribute('name')
+  const radioChecked = document.querySelector(`input[name="${radioName}"]:checked`)
+  console.log("🚀 ~ validateRadioInput ~ radioChecked:", radioChecked)
+  if (!radioChecked) {
+    data.dataset.errorVisible = true
+    return false
+  } else {
+    data.dataset.errorVisible = false
+    return true
+  }
+}
+
+// Method to check checkbox input
+const validateCheckboxInput = (input, data) => {
+  if (!input.checked) {
+    data.dataset.errorVisible = true
+    return false
+  } else {
+    data.dataset.errorVisible = false
+    return true
+  }
+}
+
+// Method to check number input
+const validateNumberInput = (input, data) => {
+  console.log("🚀 ~ validateNumberInput ~ Number(input.value):", Number(input.value))
+  if (!input.value || Number(input.value) < 0) {
+    data.dataset.errorVisible = true
+    return false
+  } else {
+    data.dataset.errorVisible = false
+    return true
+  }
+}
+
+// Init array for all elements with eventlistener input
+const inputTextElements = [
+  {
+    elementHTML: firstInput,
+    method: validateTextInput
+  },
+  {
+    elementHTML: lastInput,
+    method: validateTextInput
+  },
+  {
+    elementHTML: emailInput,
+    method: validateEmailInput
+  }, 
+  {
+    elementHTML: birthdateInput,
+    method: validateDateInput
+  },
+  {
+    elementHTML: quantityInput,
+    method: validateNumberInput
+  },
+  {
+    elementHTML: location1Input,
+    method: validateRadioInput
+  },
+  {
+    elementHTML: location2Input,
+    method: validateRadioInput
+  },
+  {
+    elementHTML: location3Input,
+    method: validateRadioInput
+  },
+  {
+    elementHTML: location4Input,
+    method: validateRadioInput
+  },
+  {
+    elementHTML: location5Input,
+    method: validateRadioInput
+  },
+  {
+    elementHTML: location6Input,
+    method: validateRadioInput
+  },
+  {
+    elementHTML: accepCGVInput,
+    method: validateCheckboxInput
+  }
+]
+
+// Init event input for each element form
+inputTextElements.forEach(inputElement => {
+  inputElement.elementHTML.addEventListener('input', (e)=> {
+    if (inputElement.method(e.target, e.target.parentNode)) {
+      displayErrorMessage(e.target.parentNode, e.target, e.target.parentNode.dataset.errorVisible)
+    }
+  })
+})
+
+// Method to send data
 const postInfo = async() => {
   const formData = new FormData(formHTML)
   const data = {}
@@ -192,6 +328,7 @@ const postInfo = async() => {
   }
 }
 
+// Method to display a success message in modal
 const displaySuccessMessage = (message) => {
   const hideElements = ['.formData', '.text-label', '.btn-submit']
   hideElements.forEach(el => {
@@ -201,7 +338,7 @@ const displaySuccessMessage = (message) => {
     })
   })
   const successMessage = document.createElement('div')
-  successMessage.textContent = message || `Merci ! Votre réservation a été reçue.`
+  successMessage.textContent = message ?? `Merci ! Votre réservation a été reçue.`
   successMessage.classList.add('success-message')
 
   const inputClose = document.createElement('input')

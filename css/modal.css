@@ -3,6 +3,7 @@
   --font-slab: var(--font-default);
   --modal-duration: 0.8s;
   --color-grey-leight: #d3d3d3;
+  --color-success: #6cbf6c;
 }
 * {
   box-sizing: border-box;
@@ -347,13 +348,15 @@ input[data-error]::after {
   display: block;
 }
 .success-message {
-  color: #fff;
+  color: var(--color-success);
   font-size: 2.25rem;
   display: flex;
   justify-content: center;
   align-items: center;
   text-align: center;
   min-height: 80vh;
+  word-break: break-all;
+  
 }
 
 /* custom select end */
