@@ -4,6 +4,7 @@
   --modal-duration: 0.8s;
   --color-grey-leight: #d3d3d3;
   --color-success: #6cbf6c;
+  --color-white: #fff;
 }
 * {
   box-sizing: border-box;
@@ -87,7 +88,7 @@ img {
   .topnav.responsive .icon {
     position: absolute;
     right: 0;
-    top: 1rem;
+    top: 0;
   }
   .topnav.responsive a {
     float: none;
@@ -348,16 +349,18 @@ input[data-error]::after {
   display: block;
 }
 .success-message {
-  color: var(--color-success);
+  color: var(--color-white);
   font-size: 2.25rem;
   display: flex;
   justify-content: center;
   align-items: center;
   text-align: center;
   min-height: 80vh;
-  word-break: break-all;
-  
 }
+.success-message a{
+  color: var(--color-success);
+}
+
 
 /* custom select end */
 .text-label {

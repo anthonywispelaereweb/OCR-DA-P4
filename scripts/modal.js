@@ -231,7 +231,6 @@ const validateCheckboxInput = (input, data) => {
 
 // Method to check number input
 const validateNumberInput = (input, data) => {
-  console.log("🚀 ~ validateNumberInput ~ Number(input.value):", Number(input.value))
   if (!input.value || Number(input.value) < 0) {
     data.dataset.errorVisible = true
     return false
@@ -319,12 +318,10 @@ const postInfo = async() => {
   const urlApi = `https://restapi.fr/api/OCR-test-tonio-${globalData.maxBirthdate}`
   const response = await fetch(urlApi, options)
   if (response.ok) {
-    console.log()
     let result = await response.json()
-    let customMessage = `Requête reçu sur ${urlApi}`
-    console.log('🚀 ~ postInfo ~ result:', result)
-    console.log('🚀 ~ postInfo ~ customMessage:', customMessage)
-    displaySuccessMessage(customMessage)
+    if (result) {
+      displaySuccessMessage(`<p>Merci ! Votre réservation a été reçue. Consultable <a href="${urlApi}" target="_blank" rel="noopener noreferrer">ici</a><p>`)
+    }
   }
 }
 
@@ -338,7 +335,7 @@ const displaySuccessMessage = (message) => {
     })
   })
   const successMessage = document.createElement('div')
-  successMessage.textContent = message ?? `Merci ! Votre réservation a été reçue.`
+  successMessage.innerHTML = message ?? `Merci ! Votre réservation a été reçue.`
   successMessage.classList.add('success-message')
 
   const inputClose = document.createElement('input')
