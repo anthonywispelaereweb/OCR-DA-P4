@@ -17,8 +17,7 @@ const modalbg = document.querySelector('.bground'),
   location4Input = document.querySelector('#location4'),
   location5Input = document.querySelector('#location5'),
   location6Input = document.querySelector('#location6'),
-  accepCGVInput = document.querySelector('#accepCGV');
-
+  accepCGVInput = document.querySelector('#accepCGV')
 
 // Add the max value for the birthdate input
 const initMaxValueBirthDate = () => {
@@ -26,14 +25,14 @@ const initMaxValueBirthDate = () => {
   const year = date.getFullYear()
   const month = date.getMonth() + 1 < 10 ? `0${date.getMonth() + 1}` : date.getMonth() + 1
   const day = date.getDate() < 10 ? `0${date.getDate()}` : date.getDate()
-  const maxDate = `${year}-${month}-${day}` 
+  const maxDate = `${year}-${month}-${day}`
   const birthdate = document.querySelector('#birthdate')
   birthdate.setAttribute('max', maxDate)
   return maxDate
 }
 
 const globalData = {
-  maxBirthdate: initMaxValueBirthDate(),
+  maxBirthdate: initMaxValueBirthDate()
 }
 
 const editNav = () => {
@@ -160,14 +159,14 @@ const checkFormValid = () => {
 }
 
 // Method to check email input
-const validateEmail = (email) => {
+const validateEmail = email => {
   // Regex details https://regexr.com/8autj
   return String(email)
     .toLowerCase()
     .match(
       /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-    );
-};
+    )
+}
 
 // Method to check text input
 const validateTextInput = (input, data) => {
@@ -208,7 +207,6 @@ const validateEmailInput = (input, data) => {
 const validateRadioInput = (input, data) => {
   const radioName = input.getAttribute('name')
   const radioChecked = document.querySelector(`input[name="${radioName}"]:checked`)
-  console.log("🚀 ~ validateRadioInput ~ radioChecked:", radioChecked)
   if (!radioChecked) {
     data.dataset.errorVisible = true
     return false
@@ -253,7 +251,7 @@ const inputTextElements = [
   {
     elementHTML: emailInput,
     method: validateEmailInput
-  }, 
+  },
   {
     elementHTML: birthdateInput,
     method: validateDateInput
@@ -294,7 +292,7 @@ const inputTextElements = [
 
 // Init event input for each element form
 inputTextElements.forEach(inputElement => {
-  inputElement.elementHTML.addEventListener('input', (e)=> {
+  inputElement.elementHTML.addEventListener('input', e => {
     if (inputElement.method(e.target, e.target.parentNode)) {
       displayErrorMessage(e.target.parentNode, e.target, e.target.parentNode.dataset.errorVisible)
     }
@@ -302,18 +300,18 @@ inputTextElements.forEach(inputElement => {
 })
 
 // Method to send data
-const postInfo = async() => {
+const postInfo = async () => {
   const formData = new FormData(formHTML)
   const data = {}
   formData.forEach((value, key) => {
     data[key] = value
-  }) 
+  })
   const options = {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json',
+      'Content-Type': 'application/json'
     },
-    body: JSON.stringify(data),
+    body: JSON.stringify(data)
   }
   const urlApi = `https://restapi.fr/api/OCR-test-tonio-${globalData.maxBirthdate}`
   const response = await fetch(urlApi, options)
@@ -326,7 +324,7 @@ const postInfo = async() => {
 }
 
 // Method to display a success message in modal
-const displaySuccessMessage = (message) => {
+const displaySuccessMessage = message => {
   const hideElements = ['.formData', '.text-label', '.btn-submit']
   hideElements.forEach(el => {
     const els = document.querySelectorAll(el)
